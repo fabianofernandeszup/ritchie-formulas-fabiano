@@ -6,13 +6,12 @@
   "os": {
     "deps": [],
     "support": [
+      "windows",
       "mac",
       "linux"
     ]
   },
   "tags": [
-    "beagle",
-    "scaffoldgit",
-    "android"
+    "aws", "clean", "bucket"
   ]
 }
