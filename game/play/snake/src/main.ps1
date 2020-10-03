@@ -80,10 +80,13 @@ function CheckAppleHit
         $score += 500
 
         # Add to the snake's length
-        $script:tailLength++
-        $script:tail += new-object System.Management.Automation.Host.Coordinates
-        $script:tail[-1].x = $coord.x
-        $script:tail[-1].y = $coord.y
+        $points=5
+        for ($x=0; $x -lt $points; $x++) {
+            $script:tailLength++
+            $script:tail += new-object System.Management.Automation.Host.Coordinates
+            $script:tail[-1].x = $coord.x
+            $script:tail[-1].y = $coord.y
+        }
     }
 }
 
@@ -200,7 +203,7 @@ DrawScreenBorders;
 MoveTheApple;
 
 $tail = @()
-$tailLength = 5
+$tailLength = 10
 
 for ($i=0; $i -lt $tailLength; $i++)
 {
@@ -270,8 +273,7 @@ while (!$done)
     CheckSnakeBodyHits;
     CheckAppleHit;
 
-
-    start-sleep -mil 100
+    start-sleep -mil 50
 
     $score += $tailLength;
 
