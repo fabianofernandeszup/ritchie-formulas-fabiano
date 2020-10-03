@@ -3,7 +3,7 @@
 ## command
 
 ```bash
-rit group verb noun
+rit game play snake
 ```
 
 ## description

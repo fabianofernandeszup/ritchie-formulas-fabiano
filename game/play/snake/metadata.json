@@ -6,11 +6,11 @@
   "os": {
     "deps": [],
     "support": [
-      "mac",
+      "windows",
       "linux"
     ]
   },
   "tags": [
-    "group", "verb"
+    "game", "play", "snake"
   ]
 }
