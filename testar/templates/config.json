@@ -1,0 +1,4 @@
+{
+  "dockerImageBuilder": "cimg/node:14.0",
+  "inputs": []
+}
