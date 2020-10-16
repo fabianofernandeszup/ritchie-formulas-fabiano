@@ -8,4 +8,4 @@ rit testar templates
 
 ## description
 
-description of formula
+Teste all templates of formulas locally and with docker
