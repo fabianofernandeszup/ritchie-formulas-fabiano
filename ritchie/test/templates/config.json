@@ -1,0 +1,27 @@
+{
+  "dockerImageBuilder": "cimg/node:14.0",
+  "inputs": [
+    {
+      "default": "all",
+      "items": [
+        "all",
+        "csharp",
+        "go",
+        "java8",
+        "java11",
+        "node",
+        "php",
+        "powershell",
+        "python3",
+        "ruby",
+        "rust",
+        "shell-bat",
+        "typescript"
+      ],
+      "label": "Wich template ? ",
+      "name": "template",
+      "type": "text",
+      "tutorial": "Select all ou choose one to run tests"
+    }
+  ]
+}

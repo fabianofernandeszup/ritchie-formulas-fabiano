@@ -4,122 +4,92 @@ const path = require('path')
 const homedir = require('os').homedir()
 const stripAnsi = require('strip-ansi')
 
+// Configs
 const stdinOld = '{"sample_text":"Text","sample_list":"in_list1","sample_bool":"true"}'
 const stdinNew = '{"input_text":"Text","input_boolean":"true","input_list":"toils","input_password":"pass"}'
+
+const stdoutOld = `Hello World!
+You receive Text in text.
+You receive in_list1 in list.
+You receive true in boolean.`
+
+const stdoutNew = `Hello World!
+My name is Text.
+I've already created formulas using Ritchie.
+Today, I want to automate toils.
+My secret is pass.`
 
 let templatesLanguages = [
     {
         language: "csharp",
         stdin: stdinNew,
-        stdout: `Hello World!
-My name is Text.
-I’ve already created formulas using Ritchie.
-Today, I want to automate toils.
-My secret is pass.`
+        stdout: stdoutNew
     },
     {
         language: "go",
         stdin: stdinNew,
-        stdout: `Hello world!
-[32mMy name is Text.
-[0m[34mI’ve already created formulas using Ritchie.
-[0m[33mToday, I want to automate toils.
-[0m[36mMy secret is pass.`
+        stdout: stdoutNew
     },
     {
         language: "java8",
         stdin: stdinNew,
-        stdout: `Hello World!
-[32mMy name is Text.[39m
-[36mI’ve already created formulas using Ritchie.[39m
-[33mToday, I want to automate toils.[39m
-[35mMy secret is pass.[39m`
+        stdout: stdoutNew
     },
     {
         language: "java11",
         stdin: stdinOld,
-        stdout: `Hello World!
-You receive Text in text.
-You receive in_list1 in list.
-You receive true in boolean.`
+        stdout: stdoutOld
     },
     {
         language: "node",
         stdin: stdinNew,
-        stdout: `Hello World!
-[32mMy name is undefined[39m
-[31mI’m excited in creating new formulas using Ritchie.[39m
-[33mToday, I want to automate undefined[39m
-[36mMy secret is undefined[39m`
+        stdout: stdoutNew
     },
     {
         language: "php",
         stdin: stdinOld,
-        stdout: `Hello World!
-[2;32mYou receive Text in text.
-[2;31mYou receive in_list1 in list.
-[2;34mYou receive true in boolean.`
+        stdout: stdoutOld
     },
     {
         language: "powershell",
         stdin: stdinOld,
-        stdout: `Hello, World!
-You receive Text in text.
-You receive in_list1 in list. 
-You receive true in boolean.`
+        stdout: stdoutOld
     },
     {
         language: "python3",
         stdin: stdinOld,
-        stdout: `Hello World!
-[38;5;2mYou receive Text in text.[0m
-[38;5;1mYou receive in_list1 in list.[0m
-[38;5;3mYou receive true in boolean.[0m`
+        stdout: stdoutOld
     },
     {
         language: "ruby",
         stdin: stdinOld,
-        stdout: `Hello World!
-[0;31;49mYou receive Text in text.[0m
-[0;32;49mYou receive in_list1 in list.[0m
-[0;34;49mYou receive true in boolean.[0m`
+        stdout: stdoutOld
     },
     {
         language: "rust",
         stdin: stdinNew,
-        stdout: `Hello World!
-My name is Text.
-I’ve already created formulas using Ritchie.
-Today, I want to automate toils.
-My secret is pass.`
+        stdout: stdoutNew
     },
     {
         language: "shell-bat",
         stdin: stdinNew,
-        stdout: `Hello World! 
-[32mMy name is Text.[0m
-[34mI've already created formulas using Ritchie.[0m
-[33mToday, I want to automate toils.[0m
-[36mMy secret is pass.[0m`
+        stdout: stdoutNew
     },
     {
         language: "typescript",
         stdin: stdinNew,
-        stdout: `Hello World!
-My name is Text.
-I’ve already created formulas using Ritchie.
-Today, I want to automate toils.
-My secret is pass.`
+        stdout: stdoutNew
     }
 ]
 
-//templatesLanguages = templatesLanguages.filter((item) => ['go'].indexOf(item.language) >= 0)
+async function Run(templates) {
+    if (templates!='all') {
+        templatesLanguages = templatesLanguages.filter((item) => [templates].indexOf(item.language) >= 0)
+    }
 
-async function Run(input1, input2, input3) {
     console.log("***********************************")
     console.log("* Test Ritchie Forulas Templates  *")
     console.log("***********************************")
-
     createFormulas()
 
     // Local
@@ -167,6 +137,10 @@ async function Run(input1, input2, input3) {
     console.log("* 8 - Runnning Local Second Tests *")
     console.log("***********************************")
     await runTests(false, false)
+
+    console.log("***********************************")
+    console.log("* Tests Finished                  *")
+    console.log("***********************************")
 
 }
 
@@ -230,20 +204,29 @@ function runExec(template, docker, clearBin) {
     exec(command, (error, stdout, stderr) => {
         if (error) {
             console.log("["+template.language+"] - [31mERROR[39m")
-            registerErrorLog(docker, template.language, `error: ${error.message}`)
+            let output = `command: ${command}\n`
+            output += `error: ${error.message}`
+            registerErrorLog(docker, template.language, output)
             return resolve(error)
         }
         if (stderr) {
             console.log("["+template.language+"] - [31mSTDERR[39m")
-            registerErrorLog(docker, template.language, `stderr: ${stderr}`)
+            let output = `command: ${command}\n`
+            output += `stderr: ${stderr}`
+            registerErrorLog(docker, template.language, output)
             return resolve(stderr)
         }
 
-        if (stripAnsi(stdout).trim().indexOf(stripAnsi(template.stdout).trim()) >= 0) {
+       let stdoutFinal = stripAnsi(stdout.trim()).trim()
+       let templateStdoutFinal = stripAnsi(template.stdout.trim()).trim()
+
+        if (stdoutFinal.indexOf(templateStdoutFinal) >= 0) {
             console.log("["+template.language+"] - [32mPASS[39m")
         } else {
             console.log("["+template.language+"] - [31mFAIL OUTPUT[39m")
             let output = 'Template fail output\n'
+            output += '------------ Command ---------------\n'
+            output += command+'\n'
             output += '------------ Expected ---------------\n'
             output += stripAnsi(template.stdout).trim()
             output += '\n------------- Output ----------------\n'
