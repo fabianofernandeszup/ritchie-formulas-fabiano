@@ -18,10 +18,22 @@
         "shell-bat",
         "typescript"
       ],
-      "label": "Wich template ? ",
+      "label": "Wich template ?",
       "name": "template",
       "type": "text",
       "tutorial": "Select all ou choose one to run tests"
+    },
+    {
+      "default": "local",
+      "items": [
+        "all",
+        "local",
+        "docker"
+      ],
+      "label": "Wich scenarios ?",
+      "name": "scenario",
+      "type": "text",
+      "tutorial": "Select all to run 8 scenarios or choose between local or docker"
     }
   ]
 }

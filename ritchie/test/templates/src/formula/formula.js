@@ -82,7 +82,7 @@ let templatesLanguages = [
     }
 ]
 
-async function Run(templates) {
+async function Run(templates, scenario) {
     if (templates!='all') {
         templatesLanguages = templatesLanguages.filter((item) => [templates].indexOf(item.language) >= 0)
     }
@@ -93,50 +93,58 @@ async function Run(templates) {
     createFormulas()
 
     // Local
-    console.log("***********************************")
-    console.log("* 1 - Runnning Local Tests        *")
-    console.log("***********************************")
-    await runTests(false, true)
+    if (scenario == 'local' || scenario == 'all') {
+        console.log("***********************************")
+        console.log("* 1 - Runnning Local Tests        *")
+        console.log("***********************************")
+        await runTests(false, true)
+    }
 
     // Local Twice
-    console.log("***********************************")
-    console.log("* 2 - Runnning Local Twice Tests  *")
-    console.log("***********************************")
-    await runTests(false, false)
+    if (scenario == 'all') {
+        console.log("***********************************")
+        console.log("* 2 - Runnning Local Twice Tests  *")
+        console.log("***********************************")
+        await runTests(false, false)
+    }
 
     // Docker
-    console.log("***********************************")
-    console.log("* 3 - Runnning Docker Tests       *")
-    console.log("***********************************")
-    await runTests(true, true)
+    if (scenario == 'docker' || scenario == 'all') {
+        console.log("***********************************")
+        console.log("* 3 - Runnning Docker Tests       *")
+        console.log("***********************************")
+        await runTests(true, true)
+    }
 
-    // Docker Twice
-    console.log("***********************************")
-    console.log("* 4 - Runnning Docker Twice Tests *")
-    console.log("***********************************")
-    await runTests(true, false)
+    if (scenario == 'all') {
+        // Docker Twice
+        console.log("***********************************")
+        console.log("* 4 - Runnning Docker Twice Tests *")
+        console.log("***********************************")
+        await runTests(true, false)
 
-    // Local First
-    console.log("***********************************")
-    console.log("* 5 - Runnning Local First Tests  *")
-    console.log("***********************************")
-    await runTests(false, true)
+        // Local First
+        console.log("***********************************")
+        console.log("* 5 - Runnning Local First Tests  *")
+        console.log("***********************************")
+        await runTests(false, true)
 
-    console.log("***********************************")
-    console.log("* 6 - Runnning Docker Second Tests*")
-    console.log("***********************************")
-    await runTests(true, false)
+        console.log("***********************************")
+        console.log("* 6 - Runnning Docker Second Tests*")
+        console.log("***********************************")
+        await runTests(true, false)
 
-    // Docker First
-    console.log("***********************************")
-    console.log("* 7 - Runnning Docker First Tests *")
-    console.log("***********************************")
-    await runTests(true, true)
+        // Docker First
+        console.log("***********************************")
+        console.log("* 7 - Runnning Docker First Tests *")
+        console.log("***********************************")
+        await runTests(true, true)
 
-    console.log("***********************************")
-    console.log("* 8 - Runnning Local Second Tests *")
-    console.log("***********************************")
-    await runTests(false, false)
+        console.log("***********************************")
+        console.log("* 8 - Runnning Local Second Tests *")
+        console.log("***********************************")
+        await runTests(false, false)
+    }
 
     console.log("***********************************")
     console.log("* Tests Finished                  *")
