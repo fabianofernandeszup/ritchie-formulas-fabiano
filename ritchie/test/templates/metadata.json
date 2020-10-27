@@ -3,6 +3,14 @@
     "local",
     "docker"
   ],
+  "ritchie": {
+    "deps": [
+      {
+        "repo": "https://github.com/ZupIT/itau-ritchie-formulas",
+        "tag": "1.0.0"
+      }
+    ]
+  },
   "os": {
     "deps": [],
     "support": [
@@ -11,6 +19,7 @@
       "linux"
     ]
   },
+  "category": "deploy",
   "tags": [
     "testar", "templates"
   ]

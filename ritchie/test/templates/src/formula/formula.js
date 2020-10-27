@@ -5,6 +5,7 @@ const homedir = require('os').homedir()
 const stripAnsi = require('strip-ansi')
 
 // Configs
+let currentPwd = ''
 const stdinOld = '{"sample_text":"Text","sample_list":"in_list1","sample_bool":"true"}'
 const stdinNew = '{"input_text":"Text","input_boolean":"true","input_list":"toils","input_password":"pass"}'
 
@@ -37,8 +38,8 @@ let templatesLanguages = [
     },
     {
         language: "java11",
-        stdin: stdinOld,
-        stdout: stdoutOld
+        stdin: stdinNew,
+        stdout: stdoutNew
     },
     {
         language: "node",
@@ -82,7 +83,9 @@ let templatesLanguages = [
     }
 ]
 
-async function Run(templates, scenario) {
+async function Run(templates, scenario, pwd) {
+    this.currentPwd = pwd
+    console.log(this.currentPwd)
     if (templates!='all') {
         templatesLanguages = templatesLanguages.filter((item) => [templates].indexOf(item.language) >= 0)
     }
@@ -157,7 +160,7 @@ function createFormulas() {
 
     // Copy formulas
     execSync('rm -rf '+homedir+'/.rit/repos/local/test-formula-template')
-    execSync('mkdir '+homedir+'/.rit/repos/local/test-formula-template')
+    execSync('mkdir -p '+homedir+'/.rit/repos/local/test-formula-template')
     execSync('cp -r '+homedir+'/.rit/repos/commons/templates/create_formula/languages/* '+homedir+'/.rit/repos/local/test-formula-template')
 
     // Ajust tree.json
@@ -250,7 +253,9 @@ function runExec(template, docker, clearBin) {
 function registerErrorLog(docker, command, content) {
     const fileName = command.replace(/ /g, "_");
     const sufix = docker ? '_docker' : ''
-    fs.writeFileSync(fileName+sufix+'.log', content, {flag:'w'}, (err) => {});
+    const fileNameFull = this.currentPwd + '/' + fileName +  sufix + '.log'
+    console.log(fileNameFull)
+    fs.writeFile(fileNameFull, content, (err) => {});
 }
 
 const formula = Run
