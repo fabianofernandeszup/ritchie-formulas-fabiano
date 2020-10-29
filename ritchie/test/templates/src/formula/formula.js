@@ -1,5 +1,6 @@
 const { exec, execSync } = require("child_process")
 const fs = require('fs')
+const fse = require('fs-extra')
 const path = require('path')
 const homedir = require('os').homedir()
 const stripAnsi = require('strip-ansi')
@@ -159,9 +160,10 @@ function createFormulas() {
     console.log('Creating formulas...')
 
     // Copy formulas
-    execSync('rm -rf '+homedir+'/.rit/repos/local/test-formula-template')
-    execSync('mkdir -p '+homedir+'/.rit/repos/local/test-formula-template')
-    execSync('cp -r '+homedir+'/.rit/repos/commons/templates/create_formula/languages/* '+homedir+'/.rit/repos/local/test-formula-template')
+    const formulaDir = `${homedir}/.rit/repos/local/test-formula-template`
+    fs.rmdirSync(formulaDir, { recursive: true })
+    fs.mkdirSync(formulaDir)
+    fse.copySync(`${homedir}/.rit/repos/commons/templates/create_formula/languages`, formulaDir)
 
     // Ajust tree.json
     let treeJson = require(path.resolve(homedir+'/.rit/repos/local/tree.json'));
@@ -205,12 +207,17 @@ function runExec(template, docker, clearBin) {
   return new Promise((resolve, reject) => {
     // Remove Bin
     if (clearBin) {
-      execSync('rm -rf '+homedir+'/.rit/repos/local/test-formula-template/'+template.language+'/bin')
+      fs.rmdirSync(`${homedir}/.rit/repos/local/test-formula-template/${template.language}/bin`, { recursive: true })
     }
 
     // Run Command
     let flagDocker = docker ? '--docker' : ''
-    let command = 'echo \''+template.stdin+'\' | rit test-formula-template '+template.language+' --stdin ' + flagDocker
+    let command
+    if (process.platform === "win32") {
+        command = `echo ${template.stdin} | rit test-formula-template ${template.language} --stdin ${flagDocker}`
+    } else {
+        command = 'echo \''+template.stdin+'\' | rit test-formula-template '+template.language+' --stdin ' + flagDocker
+    }
 
     exec(command, (error, stdout, stderr) => {
         if (error) {
@@ -228,8 +235,8 @@ function runExec(template, docker, clearBin) {
             return resolve(stderr)
         }
 
-       let stdoutFinal = stripAnsi(stdout.trim()).trim()
-       let templateStdoutFinal = stripAnsi(template.stdout.trim()).trim()
+        let stdoutFinal = stripAnsi(stdout.trim()).trim().replace(/(\r\n|\n|\r)/g, "")
+        let templateStdoutFinal = stripAnsi(template.stdout.trim()).trim().replace(/(\r\n|\n|\r)/g, "")
 
         if (stdoutFinal.indexOf(templateStdoutFinal) >= 0) {
             console.log("["+template.language+"] - [32mPASS[39m")
@@ -253,9 +260,14 @@ function runExec(template, docker, clearBin) {
 function registerErrorLog(docker, command, content) {
     const fileName = command.replace(/ /g, "_");
     const sufix = docker ? '_docker' : ''
-    const fileNameFull = this.currentPwd + '/' + fileName +  sufix + '.log'
-    console.log(fileNameFull)
-    fs.writeFile(fileNameFull, content, (err) => {});
+    const fileNameFull = fileName +  sufix + '.log'
+    const dirName = this.currentPwd + '/templates-logs'
+    console.log(`${dirName}/${fileNameFull}`)
+
+    fs.rmdirSync(dirName, { recursive: true })
+    fs.mkdirSync(dirName)
+
+    fs.writeFile(`${dirName}/${fileNameFull}`, content, (err) => {});
 }
 
 const formula = Run
