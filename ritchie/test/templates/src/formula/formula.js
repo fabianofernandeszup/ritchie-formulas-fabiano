@@ -162,7 +162,7 @@ function createFormulas() {
     // Copy formulas
     const formulaDir = `${homedir}/.rit/repos/local/test-formula-template`
     fs.rmdirSync(formulaDir, { recursive: true })
-    fs.mkdirSync(formulaDir)
+    fse.mkdirpSync(formulaDir)
     fse.copySync(`${homedir}/.rit/repos/commons/templates/create_formula/languages`, formulaDir)
 
     // Ajust tree.json
