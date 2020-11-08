@@ -1,0 +1,10 @@
+{
+  "dockerImageBuilder": "ritclizup/rit-shell-bat-builder",
+  "inputs": [
+    {
+      "label": "UF: ",
+      "name": "uf",
+      "type": "text"
+    }
+  ]
+}

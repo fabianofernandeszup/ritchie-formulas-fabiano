@@ -1,0 +1,42 @@
+{
+  "dockerImageBuilder": "cimg/base:stable-20.04",
+  "inputs": [
+    {
+      "name": "username",
+      "type": "CREDENTIAL_GITHUB_USERNAME"
+    },
+    {
+      "name": "token",
+      "type": "CREDENTIAL_GITHUB_TOKEN"
+    },
+    {
+      "name": "email",
+      "type": "CREDENTIAL_GITHUB_EMAIL"
+    },
+    {
+      "default": "1.0.0",
+      "label": "Release Tag: (default: 1.0.0)",
+      "name": "version",
+      "type": "text",
+      "tutorial": "Project version e.g.: 1.0.0"
+    },
+    {
+      "label": "Description: ",
+      "name": "description",
+      "type": "text",
+      "tutorial": "Project version e.g.: 1.0.0"
+    },
+    {
+      "cache": {
+        "active": true,
+        "newLabel": "Type new branch. ",
+        "qty": 10
+      },
+      "default": "master",
+      "label": "Select destination branch (default: master):",
+      "name": "branch",
+      "type": "text",
+      "tutorial": "A git branch i.e., master, some-branch, developer"
+    }
+  ]
+}

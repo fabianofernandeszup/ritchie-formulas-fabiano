@@ -1,0 +1,37 @@
+{
+  "dockerImageBuilder": "ritclizup/rit-shell-bat-builder",
+  "inputs": [
+    {
+      "name": "nome",
+      "type": "text"
+    },
+    {
+      "name": "uf",
+      "label": "CDI: ",
+      "type": "dynamic_list",
+      "dynamic_items_source": {
+        "formula": "rit poc cadastro usuario listagem-estados",
+        "api": "https://brasil.cep/",
+        "inputs": [
+          {"name": "list_name", "value": "ufs"}
+        ]
+      },
+      "tutorial": "CDI é a faixa de IPS do seu servidor.",
+      "required": false
+    },
+    {
+      "name": "cidade",
+      "label": "Qual sua cidade: ",
+      "type": "dynamic_list",
+      "dynamic_items_source": {
+        "formula": "rit poc cadastro usuario listagem-cidades",
+        "inputs": [
+          {"name": "uf", "value": "{{uf}}"},
+          {"name": "list_name", "value": "cidades"}
+        ]
+      },
+      "tutorial": "Selecione sua cidade",
+      "required": false
+    }
+  ]
+}

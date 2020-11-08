@@ -49,23 +49,23 @@ let templatesLanguages = [
     },
     {
         language: "php",
-        stdin: stdinOld,
-        stdout: stdoutOld
+        stdin: stdinNew,
+        stdout: stdoutNew
     },
     {
         language: "powershell",
-        stdin: stdinOld,
-        stdout: stdoutOld
+        stdin: stdinNew,
+        stdout: stdoutNew
     },
     {
         language: "python3",
-        stdin: stdinOld,
-        stdout: stdoutOld
+        stdin: stdinNew,
+        stdout: stdoutNew
     },
     {
         language: "ruby",
-        stdin: stdinOld,
-        stdout: stdoutOld
+        stdin: stdinNew,
+        stdout: stdoutNew
     },
     {
         language: "rust",
