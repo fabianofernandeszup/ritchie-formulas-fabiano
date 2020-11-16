@@ -1,0 +1,16 @@
+{
+  "dockerImageBuilder": "ritclizup/rit-shell-bat-builder",
+  "inputs": [
+    {
+      "cache": {
+        "active": true,
+        "newLabel": "Type new value. ",
+        "qty": 3
+      },
+      "label": "Project Name Id: ",
+      "name": "rit_project_name",
+      "type": "text",
+      "required": true
+    }
+  ]
+}
