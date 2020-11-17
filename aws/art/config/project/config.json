@@ -7,8 +7,20 @@
         "newLabel": "Type new value. ",
         "qty": 3
       },
-      "label": "Project Name Id: ",
+      "label": "Repository Name Id: (Ex: project-test)",
       "name": "rit_project_name",
+      "type": "text",
+      "required": true
+    },
+    {
+      "cache": {
+        "active": true,
+        "newLabel": "Type new value. ",
+        "qty": 3
+      },
+      "label": "Domain (Ex: zup): ",
+      "default": "zup",
+      "name": "rit_domain",
       "type": "text",
       "required": true
     }
